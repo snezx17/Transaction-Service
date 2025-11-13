@@ -2,18 +2,25 @@ package user
 
 import "fmt"
 
-type User struct {
-	name    string
-	balance float32
+var listUsers = make([]userStruct, 0) //БД юзеров
+
+type userStruct struct {
+	username string
+	balance  int
 }
 
-func (u User) Createuser(n string) {
-	if len(n) < 2 {
-		fmt.Println("Вы ввели некорректное имя!")
-		return
+func AddNewUser(n string) { // Создание нового пользователя
+	newUser := userStruct{
+		username: n,
+		balance:  0,
 	}
-	u.name = n
-	u.balance = 0.0
 
-	fmt.Println("Новый пользователь:", u.name, "баланс: ", u.balance)
+	listUsers = append(listUsers, newUser)
+
+	fmt.Println("Создан новый пользователь:", newUser.username, "баланс: ", newUser.balance)
+
+}
+
+func GetUsers() { // Вывод списка всех пользователей
+	fmt.Println("Список всех пользователей:", listUsers)
 }

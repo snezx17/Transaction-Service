@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Transaction-Service/user"
 	"bufio"
 	"fmt"
 	"os"
@@ -33,11 +34,17 @@ func main() {
 		cmd := fieldScan[0]
 
 		switch cmd {
-		case "help":
+
+		case "help": // Список команд
 			help()
-		case "exit":
+
+		case "exit": // Выход
 			return
-		case "createuser":
+
+		case "users":
+			user.GetUsers()
+
+		case "createuser": // Создание пользователя
 
 			fmt.Println("Если вы хотите создать нового пользователя введите имя, иначе чтобы выйти exit")
 			fmt.Print("Введите имя: ")
@@ -51,9 +58,24 @@ func main() {
 				return
 			}
 
-			fmt.Println("=======================================")
-			fmt.Println("Создание нового пользователя", name, " ...")
-			fmt.Println("=======================================")
+			if len(name) >= 2 {
+				fmt.Println("=======================================")
+				fmt.Println("Создание нового пользователя", name, " ...")
+				fmt.Println("=======================================")
+
+				user.AddNewUser(name)
+
+				fmt.Println("Новый пользоавтель создан!")
+
+			} else {
+				fmt.Println("Вы ввели некорректное имя!")
+			}
+		case "addmoney": // Добавление balance к user
+
+		case "removemoney": // Удаление balance к user
+
+		case "transfermoney": // Перевод balance от user к user
+
 		default:
 			fmt.Println("Вы ничего не ввели! Для просмотра введите 'help'. Повторите ввод...")
 		}
