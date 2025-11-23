@@ -5,11 +5,18 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
 func help() {
-	fmt.Println("Тут список команд!.....")
+	fmt.Println("=======================================")
+	fmt.Println("Список команд:")
+	fmt.Println("users | Вывести список всех пользователей")
+	fmt.Println("createuser | Создать нового пользователя")
+
+	fmt.Println("=======================================")
+
 }
 
 func main() {
@@ -65,13 +72,50 @@ func main() {
 
 				user.AddNewUser(name)
 
-				fmt.Println("Новый пользоавтель создан!")
+				fmt.Println("Новый пользователь создан!")
 
 			} else {
 				fmt.Println("Вы ввели некорректное имя!")
 			}
 		case "addmoney": // Добавление balance к user
+			fmt.Print("Укажите имя пользователя для начисления: ")
+			if ok := scanner.Scan(); !ok {
+				fmt.Println("Ошибка ввода!")
+				return
+			}
+			name := scanner.Text()
+			fmt.Println("Корректно ли имя:", name)
 
+			if ok := scanner.Scan(); !ok {
+				fmt.Println("Ошибка ввода!")
+				return
+			}
+
+			input := scanner.Text()
+
+			if input == "y" {
+				if ok := scanner.Scan(); !ok {
+					fmt.Println("Ошибка ввода!")
+					return
+				}
+				input := scanner.Text()
+				value, err := strconv.Atoi(input)
+
+				if err != nil {
+					fmt.Println("Ошибка ввода!")
+					return
+				}
+
+				user.Addmoney(name, value)
+
+			}
+			if input == "n" {
+
+			} else {
+
+			}
+			//Вывод пользователя + подтверждение
+			//ввод валюты
 		case "removemoney": // Удаление balance к user
 
 		case "transfermoney": // Перевод balance от user к user

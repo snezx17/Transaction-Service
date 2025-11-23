@@ -24,3 +24,7 @@ func AddNewUser(n string) { // Создание нового пользоват�
 func GetUsers() { // Вывод списка всех пользователей
 	fmt.Println("Список всех пользователей:", listUsers)
 }
+
+func Addmoney(name string, value int) {
+
+}
