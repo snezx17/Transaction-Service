@@ -2,10 +2,14 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"strconv"
 )
 
-func getbonus(w http.ResponseWriter, r *http.Request) {
+var Balance = 0
+
+func getbonushandler(w http.ResponseWriter, r *http.Request) {
 	text := "Бонус получен!"
 	b := []byte(text)
 
@@ -18,8 +22,34 @@ func getbonus(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func payhanler(w http.ResponseWriter, r *http.Request) {
+	ResponsBodyRequest, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("failed to read http body")
+	}
+
+	ResponsBodyRequestString := string(ResponsBodyRequest)
+
+	paymentAmmount, err := strconv.Atoi(ResponsBodyRequestString)
+	if err != nil {
+		fmt.Println("failed to convert http body to integer")
+	}
+
+	if paymentAmmount > Balance {
+		msg := "Нехватка баланса" + err.Error()
+		fmt.Println(msg)
+		_, err := w.Write([]byte(msg))
+		if err != nil {
+			fmt.Println("failed to write http response")
+		}
+	} else {
+		Balance -= paymentAmmount
+	}
+}
+
 func main() {
-	http.HandleFunc("/bonus", getbonus)
+	http.HandleFunc("/bonus", getbonushandler)
+	http.HandleFunc("/pay", getbonushandler)
 
 	err := http.ListenAndServe(":9091", nil)
 	if err != nil {
