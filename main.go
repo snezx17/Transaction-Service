@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-var Balance = 0
+var Balance = 1000
 
 func getbonushandler(w http.ResponseWriter, r *http.Request) {
 	text := "Бонус получен!"
@@ -25,7 +25,9 @@ func getbonushandler(w http.ResponseWriter, r *http.Request) {
 func payhanler(w http.ResponseWriter, r *http.Request) {
 	ResponsBodyRequest, err := io.ReadAll(r.Body)
 	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println("failed to read http body")
+		return
 	}
 
 	ResponsBodyRequestString := string(ResponsBodyRequest)
@@ -41,18 +43,27 @@ func payhanler(w http.ResponseWriter, r *http.Request) {
 		_, err := w.Write([]byte(msg))
 		if err != nil {
 			fmt.Println("failed to write http response")
+			return
 		}
 	} else {
 		Balance -= paymentAmmount
+		msg := "Успешное списание"
+		_, err := w.Write([]byte(msg))
+		if err != nil {
+			fmt.Println("failed to write http response")
+			return
+		}
+
 	}
 }
 
 func main() {
 	http.HandleFunc("/bonus", getbonushandler)
-	http.HandleFunc("/pay", getbonushandler)
+	http.HandleFunc("/pay", payhanler)
 
 	err := http.ListenAndServe(":9091", nil)
 	if err != nil {
 		fmt.Println("Произошла ошибка")
+		return
 	}
 }
