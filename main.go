@@ -61,7 +61,7 @@ func main() {
 	http.HandleFunc("/bonus", getbonushandler)
 	http.HandleFunc("/pay", payhanler)
 
-	err := http.ListenAndServe(":9091", nil)
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Произошла ошибка")
 		return
