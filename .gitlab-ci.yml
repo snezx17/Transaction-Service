@@ -1,0 +1,28 @@
+
+stages:
+  - test
+  - build
+  - deploy
+
+run_tests:
+  stage: test
+  image: node:18-alpine 
+  script:
+    - npm ci
+    - npm test
+
+build_app:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploying to staging..."
+  when: manual
+  only:
+    - develop
